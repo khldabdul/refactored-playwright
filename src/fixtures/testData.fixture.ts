@@ -1,12 +1,8 @@
-// Change this line to import from 'playwright-elements'
-import { test as baseTest } from "playwright-elements";
-
+import { generateTestPayment, generateTestProduct, generateTestUser } from "@data/testData.generator";
 import { faker } from "@faker-js/faker";
-
-// Assuming you have moved types to src/types/data.types.ts
+import { test as baseTest } from "playwright-elements";
 import type { PaymentData, ProductData, UserData } from "../types/data.types";
 
-// The rest of the file remains the same...
 type TestFixtures = {
   testUser: UserData;
   testProduct: ProductData;
@@ -14,12 +10,19 @@ type TestFixtures = {
   randomSeed: number;
 };
 
-// This now extends the test from playwright-elements
 export const test = baseTest.extend<TestFixtures>({
   randomSeed: async ({}, use) => {
     const seed = Date.now();
     faker.seed(seed);
     await use(seed);
   },
-  //... other data fixtures
+  testUser: async ({}, use) => {
+    await use(generateTestUser());
+  },
+  testProduct: async ({}, use) => {
+    await use(generateTestProduct());
+  },
+  testPayment: async ({}, use) => {
+    await use(generateTestPayment());
+  },
 });

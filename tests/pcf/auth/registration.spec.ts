@@ -18,9 +18,7 @@ test.describe(
         // Verify successful registration
         await pageObject.pCFRegistration.expectRegistrationSuccess();
         const { BrowserInstance } = await import("playwright-elements");
-        await expect(BrowserInstance.currentPage).toHaveURL(
-          /\/dashboard|\/home|\/login/
-        );
+        await expect(BrowserInstance.currentPage).toHaveURL(/\/dashboard|\/home|\/login/);
       }
     );
 
@@ -76,9 +74,7 @@ test.describe(
         });
 
         // Fill different password in confirm field
-        await pageObject.pCFRegistration.confirmPasswordInput.fill(
-          "different-password"
-        );
+        await pageObject.pCFRegistration.confirmPasswordInput.fill("different-password");
         await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show password mismatch error
@@ -177,9 +173,7 @@ test.describe(
         await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show email format error
-        await pageObject.pCFRegistration.expectRegistrationError(
-          "Please enter a valid email address"
-        );
+        await pageObject.pCFRegistration.expectRegistrationError("Please enter a valid email address");
       }
     );
 
@@ -202,9 +196,7 @@ test.describe(
         await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show password strength error
-        await pageObject.pCFRegistration.expectRegistrationError(
-          "Password must be at least 8 characters long"
-        );
+        await pageObject.pCFRegistration.expectRegistrationError("Password must be at least 8 characters long");
       }
     );
 

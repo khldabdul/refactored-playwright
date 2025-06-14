@@ -16,10 +16,7 @@ export function generateTestUser(): UserData {
       pattern: /[A-Za-z0-9!@#$%^&*]/,
     }),
     phone: faker.phone.number(),
-    dateOfBirth: faker.date
-      .birthdate({ min: 18, max: 65, mode: "age" })
-      .toISOString()
-      .split("T")[0],
+    dateOfBirth: faker.date.birthdate({ min: 18, max: 65, mode: "age" }).toISOString().split("T")[0],
     address: {
       street: faker.location.streetAddress(),
       city: faker.location.city(),

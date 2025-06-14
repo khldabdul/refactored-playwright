@@ -1,23 +1,13 @@
-import { test } from '@playwright/test';
+import { test } from "@playwright/test";
 import { $ } from "playwright-elements";
 
 export class PcfLoginPage {
   // Element definitions using playwright-elements
-  readonly emailInput = $(
-    'input[name="email"], input[type="email"], [data-testid="email"]'
-  );
-  readonly passwordInput = $(
-    'input[name="password"], input[type="password"], [data-testid="password"]'
-  );
-  readonly loginButton = $(
-    'button[type="submit"], [data-testid="login-button"]'
-  );
-  readonly rememberMeCheckbox = $(
-    'input[name="remember"], [data-testid="remember-me"]'
-  );
-  readonly forgotPasswordLink = $(
-    'a[href*="forgot"], [data-testid="forgot-password"]'
-  );
+  readonly emailInput = $('input[name="email"], input[type="email"], [data-testid="email"]');
+  readonly passwordInput = $('input[name="password"], input[type="password"], [data-testid="password"]');
+  readonly loginButton = $('button[type="submit"], [data-testid="login-button"]');
+  readonly rememberMeCheckbox = $('input[name="remember"], [data-testid="remember-me"]');
+  readonly forgotPasswordLink = $('a[href*="forgot"], [data-testid="forgot-password"]');
   readonly errorMessage = $('.error, .error-message, [data-testid="error"]');
   readonly loadingSpinner = $('.loading, .spinner, [data-testid="loading"]');
 
@@ -25,79 +15,67 @@ export class PcfLoginPage {
   readonly header = $('.header, .navbar, [data-testid="header"]').with({
     logo: $('.header-logo, .navbar-brand, [data-testid="logo"]'),
     userMenu: $('.user-menu, .user-dropdown, [data-testid="user-menu"]'),
-    searchBar: $(
-      'input[data-testid="search"], .search-input, input[placeholder*="Search"]'
-    ),
+    searchBar: $('input[data-testid="search"], .search-input, input[placeholder*="Search"]'),
     navigationMenu: $('.nav-menu, .navigation, [data-testid="navigation"]'),
-    loginButton: $(
-      'a[href*="login"], button:has-text("Login"), [data-testid="login-btn"]'
-    ),
-    logoutButton: $(
-      'a[href*="logout"], button:has-text("Logout"), [data-testid="logout-btn"]'
-    ),
+    loginButton: $('a[href*="login"], button:has-text("Login"), [data-testid="login-btn"]'),
+    logoutButton: $('a[href*="logout"], button:has-text("Logout"), [data-testid="logout-btn"]'),
 
     async search(term: string) {
-    return await test.step(`Search for "${term}"`, async () => {
-    await this.searchBar.fill(term);
-    await this.searchBar.press("Enter");
-    });
+      return await test.step(`Search for "${term}"`, async () => {
+        await this.searchBar.fill(term);
+        await this.searchBar.press("Enter");
+      });
     },
 
     async clickLogin() {
-    return await test.step("Click login button in header", async () => {
-    await this.loginButton.click();
-    });
+      return await test.step("Click login button in header", async () => {
+        await this.loginButton.click();
+      });
     },
 
     async clickLogout() {
-    return await test.step("Click logout button", async () => {
-    await this.logoutButton.click();
-    });
+      return await test.step("Click logout button", async () => {
+        await this.logoutButton.click();
+      });
     },
 
     async verifyLoggedIn(username: string) {
-    return await test.step(`Verify user "${username}" is logged in`, async () => {
-    await this.userMenu.expect().toContainText(username);
-    });
+      return await test.step(`Verify user "${username}" is logged in`, async () => {
+        await this.userMenu.expect().toContainText(username);
+      });
     },
 
     async verifyLoggedOut() {
-    return await test.step("Verify user is logged out", async () => {
-    await this.loginButton.expect().toBeVisible();
-    await this.userMenu.expect().not.toBeVisible();
-    });
+      return await test.step("Verify user is logged out", async () => {
+        await this.loginButton.expect().toBeVisible();
+        await this.userMenu.expect().not.toBeVisible();
+      });
     },
   });
 
   // Login form component
-  readonly loginForm = $(
-    'form[data-testid="login-form"], .login-form, form:has(input[type="email"])'
-  ).with({
-    submitButton: $(
-      'button[type="submit"], input[type="submit"], [data-testid="submit"]'
-    ),
-    cancelButton: $(
-      'button[type="button"]:has-text("Cancel"), [data-testid="cancel"]'
-    ),
+  readonly loginForm = $('form[data-testid="login-form"], .login-form, form:has(input[type="email"])').with({
+    submitButton: $('button[type="submit"], input[type="submit"], [data-testid="submit"]'),
+    cancelButton: $('button[type="button"]:has-text("Cancel"), [data-testid="cancel"]'),
     errorMessage: $('.error, .error-message, [data-testid="error"]'),
     successMessage: $('.success, .success-message, [data-testid="success"]'),
 
     async submit() {
-    return await test.step("Submit login form", async () => {
-    await this.submitButton.click();
-    });
+      return await test.step("Submit login form", async () => {
+        await this.submitButton.click();
+      });
     },
 
     async expectError(message: string) {
-    return await test.step(`Expect form error: "${message}"`, async () => {
-    await this.errorMessage.expect().toContainText(message);
-    });
+      return await test.step(`Expect form error: "${message}"`, async () => {
+        await this.errorMessage.expect().toContainText(message);
+      });
     },
 
     async expectSuccess(message: string) {
-    return await test.step(`Expect form success: "${message}"`, async () => {
-    await this.successMessage.expect().toContainText(message);
-    });
+      return await test.step(`Expect form success: "${message}"`, async () => {
+        await this.successMessage.expect().toContainText(message);
+      });
     },
   });
 
@@ -110,11 +88,7 @@ export class PcfLoginPage {
     });
   }
 
-  async login(credentials: {
-    email: string;
-    password: string;
-    rememberMe?: boolean;
-  }) {
+  async login(credentials: { email: string; password: string; rememberMe?: boolean }) {
     return await test.step("Login with credentials", async () => {
       await test.step("Fill email field", async () => {
         await this.emailInput.fill(credentials.email);
@@ -139,10 +113,7 @@ export class PcfLoginPage {
     });
   }
 
-  async loginWithTestUser(
-    user: { email: string; password: string; firstName?: string },
-    rememberMe: boolean = false
-  ) {
+  async loginWithTestUser(user: { email: string; password: string; firstName?: string }, rememberMe: boolean = false) {
     return await test.step("Login with test user", async () => {
       await this.login({
         email: user.email,
@@ -158,11 +129,7 @@ export class PcfLoginPage {
     });
   }
 
-  async navigateAndLogin(credentials: {
-    email: string;
-    password: string;
-    rememberMe?: boolean;
-  }) {
+  async navigateAndLogin(credentials: { email: string; password: string; rememberMe?: boolean }) {
     return await test.step("Navigate and login", async () => {
       await this.navigate();
       await this.login(credentials);

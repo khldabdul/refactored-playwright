@@ -21,9 +21,7 @@ test.describe(
         // Verify successful login
         await pageObject.pcfLogin.expectLoginSuccess();
         const { BrowserInstance } = await import("playwright-elements");
-        await expect(BrowserInstance.currentPage).toHaveURL(
-          /\/dashboard|\/home/
-        );
+        await expect(BrowserInstance.currentPage).toHaveURL(/\/dashboard|\/home/);
 
         // Verify header shows user is logged in
         await pageObject.pcfLogin.header.verifyLoggedIn(testUser.firstName);
@@ -37,10 +35,7 @@ test.describe(
       },
       async ({ pageObject }) => {
         await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.quickLogin(
-          "invalid@email.com",
-          "wrongpassword"
-        );
+        await pageObject.pcfLogin.quickLogin("invalid@email.com", "wrongpassword");
 
         // Should remain on login page with error
         await pageObject.pcfLogin.expectInvalidCredentials();
@@ -76,9 +71,7 @@ test.describe(
 
         // Should navigate to forgot password page
         const { BrowserInstance } = await import("playwright-elements");
-        await expect(BrowserInstance.currentPage).toHaveURL(
-          /\/forgot-password|\/reset/
-        );
+        await expect(BrowserInstance.currentPage).toHaveURL(/\/forgot-password|\/reset/);
       }
     );
 
@@ -95,9 +88,7 @@ test.describe(
         await pageObject.pcfLogin.passwordInput.fill("password123");
         await pageObject.pcfLogin.loginForm.submit();
 
-        await pageObject.pcfLogin.expectLoginError(
-          "Please enter a valid email address"
-        );
+        await pageObject.pcfLogin.expectLoginError("Please enter a valid email address");
       }
     );
 

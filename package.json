@@ -23,7 +23,8 @@
     "clean": "rm -rf allure-results/* allure-report/* test-results/* playwright-report/*",
     "lint": "eslint src/ tests/ --ext .ts",
     "lint:fix": "eslint src/ tests/ --ext .ts --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
   },
   "keywords": [
     "playwright",
@@ -47,8 +48,10 @@
     "chalk": "^5.4.1",
     "dotenv": "^16.5.0",
     "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
     "playwright": "^1.53.0",
     "playwright-elements": "^1.18.1",
+    "prettier": "^3.5.3",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
