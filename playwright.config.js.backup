@@ -1,0 +1,89 @@
+const { defineConfig } = require("@playwright/test");
+
+const config = defineConfig({
+  testDir: "./tests",
+  timeout: 60000,
+  expect: {
+    timeout: parseInt(process.env.TIMEOUT_EXPECT || "10000"),
+  },
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? parseInt(process.env.MAX_RETRIES || "2") : 0,
+  workers: process.env.CI
+    ? "50%"
+    : parseInt(process.env.PARALLEL_WORKERS || "4"),
+
+  // Allow decorators for Allure step annotations
+  use: {
+    baseURL: process.env.BASE_URL,
+    trace: process.env.ENABLE_TRACE === "true" ? "on-first-retry" : "off",
+    video:
+      process.env.VIDEO_ON_FAILURE === "true" ? "retain-on-failure" : "off",
+    screenshot:
+      process.env.SCREENSHOT_ON_FAILURE === "true" ? "only-on-failure" : "off",
+    actionTimeout: parseInt(process.env.TIMEOUT_ACTION || "15000"),
+    navigationTimeout: parseInt(process.env.TIMEOUT_NAVIGATION || "30000"),
+    ignoreHTTPSErrors: true,
+    locale: "en-US",
+    timezoneId: "UTC",
+  },
+
+  // Enable TypeScript decorator support
+  projects: [
+    // PCF Projects
+    {
+      name: "pcf_dev_chromium",
+      use: {
+        ...require("@playwright/test").devices["Desktop Chrome"],
+      },
+      testMatch: /tests\/pcf\/.*\.spec\.ts/,
+      grep: new RegExp(
+        process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"
+      ),
+    },
+    // ... other projects
+  ],
+
+  reporter: [
+    ["line"],
+    [
+      "html",
+      {
+        open: "never",
+        outputFolder: "playwright-report",
+      },
+    ],
+    [
+      "json",
+      {
+        outputFile: "test-results/results.json",
+      },
+    ],
+    [
+      "junit",
+      {
+        outputFile: "test-results/junit.xml",
+      },
+    ],
+    [
+      "allure-playwright",
+      {
+        outputFolder: "allure-results",
+        environmentInfo: {
+          PROJECT: (process.env.PROJECT || "pcf").toUpperCase(),
+          ENVIRONMENT: (process.env.ENV || "dev").toUpperCase(),
+          NODE_VERSION: process.version,
+          OS: process.platform,
+          BASE_URL: process.env.BASE_URL || "",
+          API_URL: process.env.API_URL || "",
+        },
+      },
+    ],
+  ],
+
+  outputDir: "test-results/",
+  globalSetup: require.resolve("./scripts/global-setup.ts"),
+  globalTeardown: require.resolve("./scripts/global-teardown.ts"),
+});
+
+module.exports = config;

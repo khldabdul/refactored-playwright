@@ -1,0 +1,70 @@
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Test artifacts
+test-results/
+allure-results/
+allure-report/
+playwright-report/
+coverage/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Keep environment templates
+!.env.template
+!.env.*.dev
+!.env.*.staging
+!.env.*.uat
+!.env.*.jit
+
+# Build artifacts
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+auth-state.json
+
+# Screenshots and videos
+screenshots/
+videos/
+traces/
+
+# Package manager files
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# Runtime files
+*.pid
+*.seed
+*.pid.lock
+
+.env.*
