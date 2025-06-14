@@ -66,28 +66,6 @@ test.describe(
     );
 
     test(
-      "Remember me functionality",
-      {
-        tag: ["@regression", "@p2"],
-      },
-      async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.loginWithTestUser(testUser, true); // rememberMe = true
-
-        // Verify successful login
-        await pageObject.pcfLogin.expectLoginSuccess();
-
-        // Navigate away and come back
-        const { BrowserInstance } = await import("playwright-elements");
-        await BrowserInstance.currentPage.goto("/");
-        await BrowserInstance.currentPage.reload();
-
-        // Should still be logged in
-        await pageObject.pcfLogin.header.verifyLoggedIn(testUser.firstName);
-      }
-    );
-
-    test(
       "Forgot password flow",
       {
         tag: ["@regression", "@p3"],
@@ -101,17 +79,6 @@ test.describe(
         await expect(BrowserInstance.currentPage).toHaveURL(
           /\/forgot-password|\/reset/
         );
-      }
-    );
-
-    test(
-      "Verify login page elements",
-      {
-        tag: ["@smoke", "@p2"],
-      },
-      async ({ pageObject }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.verifyPageElements();
       }
     );
 

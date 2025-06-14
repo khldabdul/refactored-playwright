@@ -12,11 +12,11 @@ test.describe(
         tag: ["@smoke", "@p1"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.registerWithTestUser(testUser);
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.registerWithTestUser(testUser);
 
         // Verify successful registration
-        await pageObject.pcfLogin.expectRegistrationSuccess();
+        await pageObject.pCFRegistration.expectRegistrationSuccess();
         const { BrowserInstance } = await import("playwright-elements");
         await expect(BrowserInstance.currentPage).toHaveURL(
           /\/dashboard|\/home|\/login/
@@ -30,14 +30,14 @@ test.describe(
         tag: ["@regression", "@p1"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.registerWithTestUser(testUser, {
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.registerWithTestUser(testUser, {
           acceptTerms: true,
           subscribeNewsletter: true,
         });
 
         // Verify successful registration
-        await pageObject.pcfLogin.expectRegistrationSuccess();
+        await pageObject.pCFRegistration.expectRegistrationSuccess();
       }
     );
 
@@ -47,13 +47,13 @@ test.describe(
         tag: ["@smoke", "@p2", "@negative"],
       },
       async ({ pageObject }) => {
-        await pageObject.pcfLogin.navigate();
+        await pageObject.pCFRegistration.navigate();
 
         // Try to submit form without filling required fields
-        await pageObject.pcfLogin.registrationForm.submit();
+        await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show validation errors
-        await pageObject.pcfLogin.expectRequiredFieldsError();
+        await pageObject.pCFRegistration.expectRequiredFieldsError();
         const { BrowserInstance } = await import("playwright-elements");
         await expect(BrowserInstance.currentPage).toHaveURL(/\/register/);
       }
@@ -65,10 +65,10 @@ test.describe(
         tag: ["@smoke", "@p2", "@negative"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
+        await pageObject.pCFRegistration.navigate();
 
         // Fill form with mismatched passwords
-        await pageObject.pcfLogin.fillRegistrationForm({
+        await pageObject.pCFRegistration.fillRegistrationForm({
           firstName: testUser.firstName,
           lastName: testUser.lastName,
           email: testUser.email,
@@ -76,13 +76,13 @@ test.describe(
         });
 
         // Fill different password in confirm field
-        await pageObject.pcfLogin.confirmPasswordInput.fill(
+        await pageObject.pCFRegistration.confirmPasswordInput.fill(
           "different-password"
         );
-        await pageObject.pcfLogin.registrationForm.submit();
+        await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show password mismatch error
-        await pageObject.pcfLogin.expectPasswordMismatchError();
+        await pageObject.pCFRegistration.expectPasswordMismatchError();
       }
     );
 
@@ -92,8 +92,8 @@ test.describe(
         tag: ["@regression", "@p2", "@negative"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.fillRegistrationForm({
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.fillRegistrationForm({
           firstName: testUser.firstName,
           lastName: testUser.lastName,
           email: testUser.email,
@@ -101,10 +101,10 @@ test.describe(
           acceptTerms: false, // Explicitly don't accept terms
         });
 
-        await pageObject.pcfLogin.registrationForm.submit();
+        await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show terms acceptance error
-        await pageObject.pcfLogin.expectTermsError();
+        await pageObject.pCFRegistration.expectTermsError();
       }
     );
 
@@ -115,20 +115,20 @@ test.describe(
       },
       async ({ pageObject, testUser }) => {
         // First registration
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.registerWithTestUser(testUser);
-        await pageObject.pcfLogin.expectRegistrationSuccess();
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.registerWithTestUser(testUser);
+        await pageObject.pCFRegistration.expectRegistrationSuccess();
 
         // Try to register again with same email
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.registerWithTestUser({
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.registerWithTestUser({
           ...testUser,
           firstName: "Different",
           lastName: "User",
         });
 
         // Should show email exists error
-        await pageObject.pcfLogin.expectEmailExistsError();
+        await pageObject.pCFRegistration.expectEmailExistsError();
       }
     );
 
@@ -138,8 +138,8 @@ test.describe(
         tag: ["@smoke", "@p2"],
       },
       async ({ pageObject }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.verifyPageElements();
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.verifyPageElements();
       }
     );
 
@@ -149,8 +149,8 @@ test.describe(
         tag: ["@regression", "@p3"],
       },
       async ({ pageObject }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.header.navigateToLogin();
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.header.navigateToLogin();
 
         // Should navigate to login page
         const { BrowserInstance } = await import("playwright-elements");
@@ -164,20 +164,20 @@ test.describe(
         tag: ["@regression", "@p2", "@validation"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
+        await pageObject.pCFRegistration.navigate();
 
         // Fill form with invalid email format
-        await pageObject.pcfLogin.fillRegistrationForm({
+        await pageObject.pCFRegistration.fillRegistrationForm({
           firstName: testUser.firstName,
           lastName: testUser.lastName,
           email: "invalid-email-format",
           password: testUser.password,
         });
 
-        await pageObject.pcfLogin.registrationForm.submit();
+        await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show email format error
-        await pageObject.pcfLogin.expectRegistrationError(
+        await pageObject.pCFRegistration.expectRegistrationError(
           "Please enter a valid email address"
         );
       }
@@ -189,20 +189,20 @@ test.describe(
         tag: ["@regression", "@p2", "@validation"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
+        await pageObject.pCFRegistration.navigate();
 
         // Fill form with weak password
-        await pageObject.pcfLogin.fillRegistrationForm({
+        await pageObject.pCFRegistration.fillRegistrationForm({
           firstName: testUser.firstName,
           lastName: testUser.lastName,
           email: testUser.email,
           password: "123", // Weak password
         });
 
-        await pageObject.pcfLogin.registrationForm.submit();
+        await pageObject.pCFRegistration.registrationForm.submit();
 
         // Should show password strength error
-        await pageObject.pcfLogin.expectRegistrationError(
+        await pageObject.pCFRegistration.expectRegistrationError(
           "Password must be at least 8 characters long"
         );
       }
@@ -214,15 +214,15 @@ test.describe(
         tag: ["@regression", "@p3"],
       },
       async ({ pageObject, testUser }) => {
-        await pageObject.pcfLogin.navigate();
-        await pageObject.pcfLogin.registerWithTestUser(testUser, {
+        await pageObject.pCFRegistration.navigate();
+        await pageObject.pCFRegistration.registerWithTestUser(testUser, {
           subscribeNewsletter: true,
         });
 
-        await pageObject.pcfLogin.expectRegistrationSuccess();
+        await pageObject.pCFRegistration.expectRegistrationSuccess();
 
         // Could verify newsletter subscription confirmation if implemented
-        // await pageObject.pcfLogin.expectNewsletterConfirmation();
+        // await pageObject.pCFRegistration.expectNewsletterConfirmation();
       }
     );
   }
