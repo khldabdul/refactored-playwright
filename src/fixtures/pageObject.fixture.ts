@@ -1,21 +1,30 @@
-import { test as baseTest, buildPageObject, PageObject } from 'playwright-elements';
-import { test as dataTest } from './testData.fixture';
-import * as pageObjectModule from '@pages/index';
+// src/fixtures/pageObject.fixture.ts
 
-// Merge the data fixtures with playwright-elements base test
-const test = baseTest.extend(dataTest.fixtures);
+// 1. Import the test object from `testData.fixture`. It already contains your data fixtures.
+import { test as baseDataTest } from "./testData.fixture";
 
-// Define the page object fixture type
+// 2. Import helpers from playwright-elements
+import { buildPageObject, PageObject } from "playwright-elements";
+
+// 3. Import all your page object classes
+import * as pageObjectModule from "@pages/index";
+
+// 4. Define the type for the new fixture you are adding
 type PageObjectFixtures = {
   pageObject: PageObject<typeof pageObjectModule>;
 };
 
-// Extend test with page object fixture
-export const pageObjectTest = test.extend<PageObjectFixtures>({
-  pageObject: [async ({}, use) => {
-    await use(buildPageObject(pageObjectModule));
-  }, { scope: 'test' }],
+// 5. Extend the test runner that already has data fixtures with your new pageObject fixture
+export const pageObjectTest = baseDataTest.extend<PageObjectFixtures>({
+  pageObject: [
+    async ({}, use) => {
+      // buildPageObject from playwright-elements automatically handles the page instance
+      await use(buildPageObject(pageObjectModule));
+    },
+    { scope: "test" },
+  ],
 });
 
-export { expect } from '@playwright/test';
-export type { UserData, ProductData, PaymentData } from './testData.fixture';
+// 6. Re-export 'expect' and your data types for convenience in test files
+export { expect } from "@playwright/test";
+export type { PaymentData, ProductData, UserData } from "./testData.fixture";
