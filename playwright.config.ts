@@ -20,9 +20,7 @@ const config = defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? parseInt(process.env.MAX_RETRIES || "2") : 0,
-  workers: process.env.CI
-    ? "50%"
-    : parseInt(process.env.PARALLEL_WORKERS || "4"),
+  workers: process.env.CI ? "50%" : parseInt(process.env.PARALLEL_WORKERS || "4"),
 
   reporter: [
     ["line"],
@@ -63,11 +61,11 @@ const config = defineConfig({
 
   use: {
     baseURL: process.env.BASE_URL,
-    trace: process.env.ENABLE_TRACE === "true" ? "on-first-retry" : "off",
-    video:
-      process.env.VIDEO_ON_FAILURE === "true" ? "retain-on-failure" : "off",
-    screenshot:
-      process.env.SCREENSHOT_ON_FAILURE === "true" ? "only-on-failure" : "off",
+    trace: "on",
+    // process.env.ENABLE_TRACE === "true" ? "on-first-retry" : "off",
+    video: "on",
+    // process.env.VIDEO_ON_FAILURE === "true" ? "retain-on-failure" : "off",
+    screenshot: process.env.SCREENSHOT_ON_FAILURE === "true" ? "only-on-failure" : "off",
     actionTimeout: parseInt(process.env.TIMEOUT_ACTION || "15000"),
     navigationTimeout: parseInt(process.env.TIMEOUT_NAVIGATION || "30000"),
     ignoreHTTPSErrors: true,
@@ -83,9 +81,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/pcf\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"),
     },
     {
       name: "pcf_staging_chromium",
@@ -93,11 +89,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/pcf\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "pcf" && process.env.ENV === "staging"
-          ? ".*"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "pcf" && process.env.ENV === "staging" ? ".*" : "$^"),
     },
     {
       name: "pcf_uat_chromium",
@@ -105,11 +97,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/pcf\/.*smoke.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "pcf" && process.env.ENV === "uat"
-          ? "@smoke"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "pcf" && process.env.ENV === "uat" ? "@smoke" : "$^"),
     },
 
     // MSS Projects
@@ -119,9 +107,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/mss\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "mss" && process.env.ENV === "dev" ? ".*" : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "mss" && process.env.ENV === "dev" ? ".*" : "$^"),
     },
     {
       name: "mss_staging_chromium",
@@ -129,11 +115,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/mss\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "mss" && process.env.ENV === "staging"
-          ? ".*"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "mss" && process.env.ENV === "staging" ? ".*" : "$^"),
     },
 
     // Ilham Projects
@@ -143,11 +125,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/ilham\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "ilham" && process.env.ENV === "dev"
-          ? ".*"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "ilham" && process.env.ENV === "dev" ? ".*" : "$^"),
     },
     {
       name: "ilham_uat_chromium",
@@ -155,11 +133,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/ilham\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "ilham" && process.env.ENV === "uat"
-          ? ".*"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "ilham" && process.env.ENV === "uat" ? ".*" : "$^"),
     },
     {
       name: "ilham_jit_chromium",
@@ -167,11 +141,7 @@ const config = defineConfig({
         ...devices["Desktop Chrome"],
       },
       testMatch: /tests\/ilham\/.*smoke.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "ilham" && process.env.ENV === "jit"
-          ? "@smoke"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "ilham" && process.env.ENV === "jit" ? "@smoke" : "$^"),
     },
 
     // Mobile variants for critical projects
@@ -181,11 +151,7 @@ const config = defineConfig({
         ...devices["iPhone 13"],
       },
       testMatch: /tests\/pcf\/.*mobile.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "pcf" && process.env.ENV === "dev"
-          ? "@mobile"
-          : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? "@mobile" : "$^"),
     },
 
     // Firefox variants
@@ -195,9 +161,7 @@ const config = defineConfig({
         ...devices["Desktop Firefox"],
       },
       testMatch: /tests\/pcf\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"),
     },
 
     // Safari/WebKit variants
@@ -207,9 +171,7 @@ const config = defineConfig({
         ...devices["Desktop Safari"],
       },
       testMatch: /tests\/pcf\/.*\.spec\.ts/,
-      grep: new RegExp(
-        process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"
-      ),
+      grep: new RegExp(process.env.PROJECT === "pcf" && process.env.ENV === "dev" ? ".*" : "$^"),
     },
   ],
 
