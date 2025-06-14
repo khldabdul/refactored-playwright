@@ -45,7 +45,7 @@
     "@typescript-eslint/parser": "^8.34.0",
     "allure-commandline": "^2.34.0",
     "allure-playwright": "^3.2.2",
-    "chalk": "^5.4.1",
+    "chalk": "^4.1.2",
     "dotenv": "^16.5.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
