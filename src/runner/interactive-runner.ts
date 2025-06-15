@@ -220,7 +220,7 @@ async function executeTestRun(options: TestOptions) {
 function buildCommand(options: TestOptions): string {
   const targets = options.browsers!.join(",");
   const envVars = `PROJECT=${options.project} ENV=${options.environment} TARGETS=${targets}`;
-  let cmd = `${envVars} npx playwright test tests/${options.project}`;
+  let cmd = `${envVars} npx playwright test`;
 
   const projectConfigs = options.browsers!.map((b) =>
     b === "mobile"
