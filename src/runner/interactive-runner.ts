@@ -89,24 +89,35 @@ async function getProjectTestTags(project: string): Promise<string[]> {
   if (!existsSync(projectDir)) return [];
 
   const testFiles = findTestFiles(projectDir);
+  const allTags = new Set<string>();
+
+  // Corrected Regex: Uses a back-reference (\1) to ensure it matches the same closing quote as the opening one.
+  // The title string is now in the second capturing group (match[2]).
+  const titleRegex = /(?:test|test\.describe)\s*\(\s*(['"`])(.*?)\1/gs;
   const tagRegex = /@\w+/g;
-  const tags = new Set<string>();
 
   for (const file of testFiles) {
     try {
       const content = readFileSync(file, "utf-8");
-      // Updated regex to find tags in titles like: test('title @tag', ...)
-      const titleTagRegex = /(?:test|describe)\((`|'|").*?(@\w+).*?\1/g;
-      let match;
-      while ((match = titleTagRegex.exec(content)) !== null) {
-        tags.add(match[2]);
+      let titleMatch;
+
+      // First, find all full titles in the file.
+      while ((titleMatch = titleRegex.exec(content)) !== null) {
+        // The title string is in the second capturing group.
+        const title = titleMatch[2];
+
+        // Then, find all tags within that title.
+        const tagsInTitle = title.match(tagRegex);
+        if (tagsInTitle) {
+          tagsInTitle.forEach((tag) => allTags.add(tag));
+        }
       }
     } catch (err) {
       console.error(chalk.red(`Error reading file ${file}:`), err);
     }
   }
 
-  return Array.from(tags).sort();
+  return Array.from(allTags).sort();
 }
 
 /**
@@ -127,7 +138,6 @@ async function getProjectTestSuites(project: string): Promise<{ name: string; va
 // --- Main Runner Logic ---
 async function runInteractiveRunner() {
   try {
-    // The while(true) loop has been removed to ensure the script exits after one action.
     console.log(chalk.blue.bold("\n🎭 Playwright Multi-Project Test Runner\n"));
     const action = await select({
       message: "Select an action:",
